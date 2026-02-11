@@ -1,0 +1,69 @@
+import java.util.*;
+import java.util.stream.*;
+
+class Person {
+    String name;
+    int age;
+
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    String getName() {
+        return name;
+    }
+
+    int getAge() {
+        return age;
+    }
+
+    static boolean olderThan(Person p, int limit) {
+        return p.age > limit;
+    }
+}
+
+public class Main {
+
+    static int ageLimit;
+
+    // static method reference wrapper
+    static boolean filterByAge(Person p) {
+        return Person.olderThan(p, ageLimit);
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        List<Person> persons = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            String name = sc.next();
+            int age = sc.nextInt();
+            persons.add(new Person(name, age));
+        }
+
+        ageLimit = sc.nextInt();
+
+        // 1. Sorted names
+        persons.stream()
+                .map(Person::getName)
+                .sorted()
+                .forEach(name -> System.out.print(name + " "));
+        System.out.println();
+
+        // 2. Filter older than ageLimit (static method reference)
+        persons.stream()
+                .filter(Main::filterByAge)
+                .map(Person::getName)
+                .forEach(name -> System.out.print(name + " "));
+        System.out.println();
+
+        // 3. Uppercase names (instance method reference)
+        persons.stream()
+                .map(Person::getName)
+                .map(String::toUpperCase)
+                .forEach(name -> System.out.print(name + " "));
+    }
+}

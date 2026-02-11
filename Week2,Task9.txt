@@ -1,0 +1,61 @@
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Event {
+    String name;
+    LocalDate date;
+
+    Event(String name, LocalDate date) {
+        this.name = name;
+        this.date = date;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        List<Event> events = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            String name = sc.next();
+            String dateStr = sc.next();
+            LocalDate date = LocalDate.parse(dateStr);
+            events.add(new Event(name, date));
+        }
+
+        int month = sc.nextInt();
+
+        // Sort events by date
+        events.sort(Comparator.comparing(e -> e.date));
+
+        // Print sorted event names
+        for (Event e : events) {
+            System.out.print(e.name + " ");
+        }
+        System.out.println();
+
+        // Earliest event
+        System.out.println(events.get(0).name);
+
+        // Latest event
+        System.out.println(events.get(events.size() - 1).name);
+
+        // Events in given month
+        List<String> monthEvents = events.stream()
+                .filter(e -> e.date.getMonthValue() == month)
+                .map(e -> e.name)
+                .collect(Collectors.toList());
+
+        for (String name : monthEvents) {
+            System.out.print(name + " ");
+        }
+
+        sc.close();
+    }
+}
+
